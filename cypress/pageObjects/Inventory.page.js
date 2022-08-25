@@ -11,10 +11,10 @@ class InventoryPage extends BasePage {
         return cy.get('[data-test="product_sort_container"]')
     }
     static get firstProductName(){
-        return cy.get('#item_5_title_link > .inventory_item_name')
+        return cy.get('div.inventory_item_label > a > div.inventory_item_name').eq(0)
     }
     static get firstProductPrice(){
-        return cy.get(':nth-child(1) > .inventory_item_description > .pricebar > .inventory_item_price')
+        return cy.get('div.pricebar > div.inventory_item_price').eq(0)
     }
 
 

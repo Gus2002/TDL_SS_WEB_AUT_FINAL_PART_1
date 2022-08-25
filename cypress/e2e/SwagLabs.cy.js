@@ -27,7 +27,7 @@ describe("Swag Labs", () => {
     LoginPage.loginBtn.click()
     InventoryPage.productImages.should("have.length", 6)
   });
-  it.only("Scenario 4 - Sort items - Price high to low", () => {
+  it("Scenario 4 - Sort items - Price high to low", () => {
 
     LoginPage.usernameInput.type("standard_user")
     LoginPage.passwordInput.type("secret_sauce")
@@ -35,5 +35,18 @@ describe("Swag Labs", () => {
     InventoryPage.productSortBtn.select("Price (high to low)")
     InventoryPage.firstProductName.should("have.text","Sauce Labs Fleece Jacket")
     InventoryPage.firstProductPrice.should("have.text","$49.99")
+  });
+  it.only("Scenario 5 - Sort items - Price low to High", () => {
+    // - Log into page with standard user credentials
+    //         - Set filter to Price low to high
+    //         - Validate that first item is “Sauce Labs Onesie”
+    //         - Validate that the first item costs “$7.99”
+
+    LoginPage.usernameInput.type("standard_user")
+    LoginPage.passwordInput.type("secret_sauce")
+    LoginPage.loginBtn.click()
+    InventoryPage.productSortBtn.select("Price (low to high)")
+    InventoryPage.firstProductName.should("have.text","Sauce Labs Onesie")
+    InventoryPage.firstProductPrice.should("have.text","$7.99")
   });
 });
