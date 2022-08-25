@@ -2,7 +2,7 @@ import BasePage from "./Base.page";
 
 class InventoryPage extends BasePage {
     static get url() {
-        return "/inventory";
+        return "/inventory.html";
       }
     static get productImages(){
         return cy.get(".inventory_item_img > a > img")
@@ -16,7 +16,9 @@ class InventoryPage extends BasePage {
     static get firstProductPrice(){
         return cy.get('div.pricebar > div.inventory_item_price').eq(0)
     }
-
+    static getProductNameByIndex(index){
+        return cy.get('div.inventory_item_label > a > div.inventory_item_name').eq(index)
+    }
 
 
 

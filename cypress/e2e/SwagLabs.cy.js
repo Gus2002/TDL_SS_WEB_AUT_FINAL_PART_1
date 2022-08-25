@@ -1,5 +1,9 @@
-import HomePage from "../pageObjects/Home.page";
+import CartPage from "../pageObjects/Cart.page";
+import CheckoutComplete from "../pageObjects/CheckoutComplete.page";
+import CheckoutStepOnePage from "../pageObjects/CheckoutStepOne.page";
+import CheckoutStepTwoPage from "../pageObjects/CheckoutStepTwo.page";
 import InventoryPage from "../pageObjects/Inventory.page";
+import InventoryItemPage from "../pageObjects/InventoryItem.page";
 import LoginPage from "../pageObjects/Login.page";
 
 describe("Swag Labs", () => {
@@ -37,11 +41,7 @@ describe("Swag Labs", () => {
     InventoryPage.firstProductPrice.should("have.text","$49.99")
   });
   it("Scenario 5 - Sort items - Price low to High", () => {
-    // - Log into page with standard user credentials
-    //         - Set filter to Price low to high
-    //         - Validate that first item is “Sauce Labs Onesie”
-    //         - Validate that the first item costs “$7.99”
-
+  
     LoginPage.usernameInput.type("standard_user")
     LoginPage.passwordInput.type("secret_sauce")
     LoginPage.loginBtn.click()
@@ -49,16 +49,66 @@ describe("Swag Labs", () => {
     InventoryPage.firstProductName.should("have.text","Sauce Labs Onesie")
     InventoryPage.firstProductPrice.should("have.text","$7.99")
   });
-  it.only("Scenario 6 - Sort items - Name (Z to A)", () => {
-    // - Log into page with standard user credentials
-    //         - Set filter to Name (Z to A)
-    //         - Validate that first item is “Test.allTheThings() T-Shirt (Red)”
-
-
+  it("Scenario 6 - Sort items - Name (Z to A)", () => {
+  
     LoginPage.usernameInput.type("standard_user")
     LoginPage.passwordInput.type("secret_sauce")
     LoginPage.loginBtn.click()
     InventoryPage.productSortBtn.select("Name (Z to A)")
     InventoryPage.firstProductName.should("have.text","Test.allTheThings() T-Shirt (Red)")
+  });
+  it("Scenario 7 - Validate shopping cart badge amount", () => {
+    
+    LoginPage.usernameInput.type("standard_user")
+    LoginPage.passwordInput.type("secret_sauce")
+    LoginPage.loginBtn.click()
+    InventoryPage.getProductNameByIndex(2).click()
+    InventoryItemPage.addToCartBtn.click()
+    InventoryItemPage.shoppingCartBadge.should("have.text", "1")
+    InventoryItemPage.backToProductsBtn.click()
+    InventoryPage.getProductNameByIndex(1).click()
+    InventoryItemPage.addToCartBtn.click()
+    InventoryItemPage.shoppingCartBadge.should("have.text", "2")
+  });
+  it("Scenario 8 - Reset App State", () => {
+    
+    LoginPage.usernameInput.type("standard_user")
+    LoginPage.passwordInput.type("secret_sauce")
+    LoginPage.loginBtn.click()
+    InventoryPage.getProductNameByIndex(2).click()
+    InventoryItemPage.addToCartBtn.click()
+    InventoryItemPage.backToProductsBtn.click()
+    InventoryPage.shoppingCartBadge.should("have.text", "1")
+    InventoryPage.burgerMenuBtn.click()
+    InventoryPage.resetAppStateBtn.click()
+    InventoryPage.shoppingCartBadge.should("not.exist")
+  });
+  it("Scenario 9 - Validate shopping cart remove button functionality", () => {
+    
+    LoginPage.usernameInput.type("standard_user")
+    LoginPage.passwordInput.type("secret_sauce")
+    LoginPage.loginBtn.click()
+    InventoryPage.getProductNameByIndex(2).click()
+    InventoryItemPage.addToCartBtn.click()
+    InventoryItemPage.shoppingCartBadge.should("have.text", "1")
+    InventoryItemPage.removeBtn.click()
+    InventoryItemPage.shoppingCartBadge.should("not.exist")
+  });
+  it("Scenario 10 - Buy a T-shirt", () => {
+   
+    LoginPage.usernameInput.type("standard_user")
+    LoginPage.passwordInput.type("secret_sauce")
+    LoginPage.loginBtn.click()
+    InventoryPage.getProductNameByIndex(5).click()
+    InventoryItemPage.addToCartBtn.click()
+    InventoryItemPage.shoppingCartLink.click()
+    CartPage.checkoutBtn.click()
+    CheckoutStepOnePage.firstNameInput.type("John")
+    CheckoutStepOnePage.lastNameInput.type("James")
+    CheckoutStepOnePage.postalCodeInput.type("US-1011")
+    CheckoutStepOnePage.continueBtn.click()
+    CheckoutStepTwoPage.itemName.should("have.text", "Test.allTheThings() T-Shirt (Red)")
+    CheckoutStepTwoPage.finishBtn.click()
+    CheckoutComplete.completeHeader.should("have.text","THANK YOU FOR YOUR ORDER")
   });
 });
